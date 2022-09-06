@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <title> حانوتي - تتبع المنتوجات </title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="shortcut icon" href="images/shopping-cart.ico" type="image/x-icon">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{margin:0 auto;font-size:17px;font-family: 'Changa';direction: rtl;/*background:url('images/template.webp');*/}
+    h1{text-align:center;padding:10px 0 20px 0;}
+    div.row{margin:0 0 20px 0;text-align:right;}
+    div.col-sm-3{margin:50px;}
+    select{margin:16px;}
+    h3{text-align:center;margin-bottom:50px;}
+    .total{
+      background-color:red;
+      margin:0 auto;
+      padding:5px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      margin-top:20px;
+      font-size:18px;
+    }
+    .totaltext{
+      display:flex;
+      margin:0 auto;
+      margin-top:5px;
+      justify-content:center;
+      align-items:center;
+    }
+    .editbtn:hover{
+      border:none;
+      border:1px solid green;
+      background-color: rgba(59, 191, 26, 0.5);
+    }
+    .removebtn:hover{
+      border:red;
+      border:1px solid red;
+      background-color: rgb(244, 67, 54, 0.5);
+    }
+    @font-face {
+      font-family: 'Changa';  
+    src: url('font/Changa-Regular.ttf');
+    }
+    #btn-back-to-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: none;
+}
+.goupbutton{
+  width:20px;
+  height:25px;
+}
+#btn-back-to-top{
+  border-radius: 50px;
+  background-color: #30b713;
+}
+
+
+  </style>
+
+</head>
+<body><!--class="bg-info"-->
+
+<div class="container">
+  <h1 id="h1">تتبع المنتوجات </h1>
+  <div class="row">
+          <div class="col-sm-3">  
+          <form action="">
+            <div class="form-group">
+              <label for="productname">الإسم:</label>
+              <input type="text" class="form-control" id="productname" name="productname">
+            </div>
+            <div class="form-group">
+              <label for="buyingprice">ثمن الجملة:</label>
+              <input onkeyup="getTotal()" type="number" class="form-control" id="buyingprice" name="buyingprice" min="0" placeholder="0" step=".01">
+            </div>
+            <div class="form-group">
+              <label for="sellingprice">	ثمن البيع:</label>
+              <input type="number" class="form-control" id="sellingprice" name="sellingprice"  min="0" step="0.1" placeholder="0 درهم">
+            </div>
+            <div class="form-group">
+              <label for="quantity">الكمية:</label>
+              <input onkeyup="getTotal()" type="number" class="form-control" id="quantity" name="quantity" placeholder=" 0 ">
+              <div class="totaltext">
+                <h6>مجموع السلعة = ثمن الجملة x الكمية</h6>
+              </div>
+              <div class="total" id=total>
+                
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="list">النوع :</label>
+              <select id = "list" name = "type">
+                <option value = "">---- إختر النوع---</option>
+                <option value = "الزيوت">الزيوت</option>
+                <option value = "الدقيق"> الدقيق</option>
+                <option value = "أدوات مدرسية"> أدوات مدرسية </option>
+                <option value = "القطاني">القطاني</option>
+                <option value = "المعجنات">المعجنات </option>
+                <option value = "مواد التنظيف"> مواد التنظيف</option>
+                <option value = "المشروبات"> المشروبات</option>
+                <option value = "الحليب و مشتقاته"> الحليب و مشتقاته </option>
+                <option value = "مواد التجميل">مواد التجميل</option>
+                <option value = "أكسيسوارات"> أكسيسوارات </option>
+                <option value = "مواد الحلويات">  مواد الحلويات</option>
+                <option value = "بيمو و مشتقاته">  بيمو و مشتقاته</option>
+                <option value = "Papier البابيي">  Papier البابيي </option>
+                <option value = "باقي السلع">  باقي السلع </option>
+         </select>
+            </div>
+            <div class="form-group">
+              <label for="expirationdate">تاريخ الصلاحية :</label>
+              <input type="date" class="form-control" id="expirationdate" name="expirationdate">
+            </div>
+            <div style="margin-top:20px;text-align:center;">
+              <button type="submit" class="btn btn-primary" id="submit">أدخل</button>
+            </div>
+          </form>
+      </div>
+   
+          <div class="col-sm-7">
+            <h3>جميع المنتوجات</h3>
+            <div  style="margin-top:20px;text-align:center;">
+              <input onkeyup="searchData(this.value)" id="search"type="search" class="form-control" placeholder="إبحث بالإسم...">
+              <!--<button id="searchTitle" onclick="getSearchMood(this.id)" type="submit" class="btn btn-primary" style="width:150px;margin:20px;">إبحث بالإسم</button>-->
+              </div>
+              <!--SECOND BUTTON-->
+              <div style="margin-top:20px;text-align:center;margin-bottom:40px;">
+                <input onkeyup="searchData2(this.value)" id="search2" type="search" class="form-control" placeholder=" إبحث بالنوع...">
+                <!--<button id="searchCategory" onclick="getSearchMood2(this.id)" type="submit" class="btn btn-primary" style="width:150px;margin:20px;">إبحث بالنوع</button>-->
+              </div>
+          <table class="table">
+    <thead>
+      <tr>
+      <th>الإسم</th>
+      <th> ثمن الجملة </th>
+      <th>  ثمن البيع </th>
+      <th>الكمية</th>
+      <th>مجموع السلعة</th>
+      <th>النوع</th>
+      <th>تاريخ الصلاحية </th>
+      <th> تعديل </th>
+      <th> حذف  </th>
+      </tr>
+    </thead>
+    <tbody id="tbody">
+
+    </tbody>
+  </table>
+  
+          </div>
+          
+    </div>
+    <button type="button" class="btn btn-floating btn-lg" id="btn-back-to-top">
+  <img src="images/go-up.png" alt="go up button" class="goupbutton">
+</button>
+
+  </div>
+
+<script src="js/bootstrap.min.js"></script>
+<script src="js/script.js"></script>
+</body>
+</html>
